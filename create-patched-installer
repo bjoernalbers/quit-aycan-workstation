@@ -1,0 +1,32 @@
+#!/bin/bash
+# Create a patched aycan workstation installer package.
+
+set -e
+
+original_installer="$1"
+filename="${original_installer##*/}"
+extension="${filename##*.}"
+patched_installer="${filename%.*}-patched.${extension}"
+quit_script="quit-aycan-workstation.sh"
+installer_base_dir="$(mktemp -d)/aycan_workstation_package_content"
+installer_scripts_dir="${installer_base_dir}/de.aycan.workstationmanager.pkg/Scripts"
+installer_preinstall_script="${installer_scripts_dir}/preinstall.sh"
+
+if [[ -z $original_installer ]]; then
+	echo "Please provide path to original installer!" >&2
+	exit 1
+fi
+
+if [[ $extension != pkg ]]; then
+	echo "Argument must be a package (.pkg)!" >&2
+	exit 1
+fi
+
+pkgutil --expand "${original_installer}" "${installer_base_dir}"
+cp "${quit_script}" "${installer_scripts_dir}"
+sed -i '' "2i\\
+./${quit_script}
+" "${installer_preinstall_script}"
+pkgutil --flatten "${installer_base_dir}" "${patched_installer}"
+rm -rf "${installer_base_dir}"
+echo "${patched_installer}"
