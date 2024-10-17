@@ -25,7 +25,8 @@ To do so the installer has to be patched to run the script (see below).
 
     ```bash
     $ productsign --sign "Developer ID Installer: Your Name (0123456789)" \
-        aycan_workstation_4.00.006-patched.pkg aycan_workstation_4.00.006-patched-and-signed.pkg
+        aycan_workstation_4.00.006-patched.pkg \
+        aycan_workstation_4.00.006-patched-and-signed.pkg
     ```
 
 5. Deploy patched & signed package with your MDM of choice
