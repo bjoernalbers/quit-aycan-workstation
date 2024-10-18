@@ -33,12 +33,10 @@ fi
 # aycan workstation has to be stopped first because aycan workstation Manager
 # refuses to quit if aycan workstation is still running.
 for app in "aycan workstation" "aycan workstation Manager"; do
-	# If quitting fails, maybe a TERM signal will do.
-	quit "${app}" || pkill -x "${app}"
+	quit "${app}" || echo "Failed to quit ${app} gracefully."
 done
 
 # Ensure that really no matching process is left alive.
-sleep 1
 pkill -9 -f "aycan workstation Manager.app"
 
 exit 0
